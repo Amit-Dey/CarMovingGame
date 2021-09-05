@@ -7,17 +7,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class Board extends JPanel implements ActionListener {
+public class Board extends JPanel{
     Image background;
     Car car;
     int a=100,b=280;
-    Timer timer;
     Board(){
         background = new ImageIcon("src/bg.jpg").getImage();
         car = new Car();
-        addKeyListener(new Ka());
-        timer = new Timer(5,this);
-        timer.start();
+        addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                car.whenKeyPassed(e);
+            }
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                car.whenKeyReleased(e);
+            }
+        });
         setFocusable(true);
     }
     @Override
@@ -25,25 +31,7 @@ public class Board extends JPanel implements ActionListener {
         super.paint(g);
         g.drawImage(background,0,0,this);
         g.drawImage(car.carImage,car.x,b,this);
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
         repaint();
     }
 
-    private class Ka extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            super.keyPressed(e);
-            car.whenKeyPassed(e);
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            super.keyReleased(e);
-            car.whenKeyReleased(e);
-        }
-    }
 }
